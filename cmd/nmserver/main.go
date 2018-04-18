@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"time"
+
 	"github.com/go-mangos/mangos"
 	"github.com/go-mangos/mangos/protocol/rep"
 	"github.com/go-mangos/mangos/protocol/req"
 	"github.com/go-mangos/mangos/transport/ipc"
 	"github.com/go-mangos/mangos/transport/tcp"
-	"os"
-	"time"
 )
 
 func die(format string, v ...interface{}) {
@@ -20,7 +21,7 @@ func date() string {
 	return time.Now().Format(time.ANSIC)
 }
 
-func node0(url string) {
+func server(url string) {
 	var sock mangos.Socket
 	var err error
 	var msg []byte
@@ -72,8 +73,8 @@ func node1(url string) {
 }
 
 func main() {
-	if len(os.Args) > 2 && os.Args[1] == "node0" {
-		node0(os.Args[2])
+	if len(os.Args) > 2 && os.Args[1] == "server" {
+		server(os.Args[2])
 		os.Exit(0)
 	}
 	if len(os.Args) > 2 && os.Args[1] == "node1" {
@@ -84,7 +85,7 @@ func main() {
 		node1(os.Args[2])
 		os.Exit(0)
 	}
-	fmt.Fprintf(os.Stderr, "Usage: reqrep node0|node1|node2 <URL>\n")
+	fmt.Fprintf(os.Stderr, "Usage: reqrep server|node1|node2 <URL>(tcp://127.0.0.1:40899)\n")
 	os.Exit(1)
 }
 
